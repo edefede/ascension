@@ -73,7 +73,7 @@ python ascension_shell_12_6.py
 ### Variables and Output
 
 ```c
-name = "Federico";
+name = "EdeFede";
 age = 30;
 pi = 3.14159;
 active = true;
