@@ -1,430 +1,344 @@
 <p align="center">
   <h1 align="center">🚀 Ascension</h1>
   <p align="center">
-    <strong>A lightweight programming language with C-style syntax, without explicit typing</strong>
-  </p>
-  <p align="center">
-    <a href="#features">Features</a> •
-    <a href="#quick-start">Quick Start</a> •
-    <a href="#examples">Examples</a> •
-    <a href="#documentation">Documentation</a>
+    <strong>A lightweight, interpreted programming language written in Python</strong><br>
+    C-like syntax • No explicit typing • Built-in GUI, Networking, Neural Networks
   </p>
 </p>
 
 ---
 
-**Ascension** is a lightweight, stack-based interpreted programming language written in Python. It features familiar C-like syntax but removes the complexity of explicit type declarations, making it perfect for learning, rapid prototyping, and scripting.
-
-```c
-// Hello World in Ascension
-message = "Hello, World!";
-print(message);
-```
-
 ## ✨ Features
 
-- **C-style syntax** — Familiar to anyone who knows C, Java, or JavaScript
-- **No explicit typing** — Variables are dynamically typed
-- **Built-in GUI support** — Create windows and interfaces with Tkinter integration
-- **Networking** — HTTP requests and TCP sockets out of the box
-- **File I/O** — Read and write files easily
-- **Terminal UI** — Curses support for terminal-based interfaces
-- **Structs** — Organize data with custom structures
-- **Arrays & Matrices** — Full support for 1D and 2D arrays with multiple syntaxes
-- **Error handling** — Try/catch blocks for robust code
-- **Interactive Shell** — REPL environment for quick experiments
-- **System commands** — Execute shell commands with `system()` and `exec()`
+- **C-like Syntax** — Familiar and easy to learn
+- **No Explicit Typing** — Variables are dynamically typed
+- **Stack-based VM** — Compiled to bytecode, then executed
+- **GUI Support** — Built-in Tkinter integration
+- **Networking** — HTTP requests and TCP sockets
+- **File I/O** — Read, write, and manage files
+- **Terminal UI** — Curses support for console apps
+- **Math Functions** — Trigonometry, random, exponentials (v12.7)
+- **Neural Networks** — Built-in library for ML experiments (v12.7)
+
+---
 
 ## 🚀 Quick Start
 
-### Requirements
-
-- Python 3.x
-- Optional: `requests` library for HTTP functionality
-- Optional: `tkinter` for GUI (usually included with Python)
-
-### Installation
-
 ```bash
+# Clone the repository
 git clone https://github.com/edefede/ascension.git
 cd ascension
+
+# Run a program
+python3 ascension_12_7.py examples/hello.asc
+
+# Or use the interactive shell
+python3 ascension_shell_12_7.py
 ```
 
-### Run a program
-
-```bash
-python ascension_12_6.py your_program.asc
-```
-
-### Debug mode
-
-```bash
-python ascension_12_6.py your_program.asc -debug
-```
-
-### Interactive Shell (REPL)
-
-```bash
-python ascension_shell_12_6.py
-```
+---
 
 ## 📝 Examples
 
 ### Variables and Output
-
 ```c
-name = "EdeFede";
-age = 30;
-pi = 3.14159;
-active = true;
-
-print(name);
-print(age);
-print("Pi is:", pi);
-```
-
-### User Input
-
-```c
-print("What is your name?");
-name = read();
-print("Hello,", name);
-```
-
-### Control Flow
-
-```c
-x = 10;
-
-if (x > 5) {
-    print("x is greater than 5");
-} else if (x == 5) {
-    print("x is exactly 5");
-} else {
-    print("x is less than 5");
-}
-
-// For loop
-for (i = 0; i < 5; i = i + 1) {
-    print("Iteration:", i);
-}
-
-// While loop
-while (x > 0) {
-    print(x);
-    x = x - 1;
-}
-
-// Switch statement
-switch (x) {
-    case 1: { print("One"); };
-    case 2: { print("Two"); };
-    default: { print("Other"); };
-}
+name = "Ascension";
+version = 12.7;
+print("Welcome to", name, "v" + version);
 ```
 
 ### Functions
-
 ```c
-func add(a, b) {
-    return a + b;
+func factorial(n) {
+    if (n <= 1) {
+        return 1;
+    }
+    return n * factorial(n - 1);
 }
 
-func greet(name) {
-    print("Hello,", name);
+print("5! =", factorial(5));  // Output: 120
+```
+
+### Control Flow
+```c
+for (i = 0; i < 5; i += 1) {
+    if (i % 2 == 0) {
+        print(i, "is even");
+    } else {
+        print(i, "is odd");
+    }
 }
-
-// Function prototypes for mutual recursion
-func isEven(n);
-func isOdd(n);
-
-func isEven(n) {
-    if (n == 0) { return true; }
-    return isOdd(n - 1);
-}
-
-func isOdd(n) {
-    if (n == 0) { return false; }
-    return isEven(n - 1);
-}
-
-result = add(5, 3);
-print("5 + 3 =", result);
-
-greet("World");
 ```
 
 ### Structs
-
 ```c
-struct Person {
-    name,
-    age,
-    city
-}
+struct Person { name, age, city };
 
 p = new Person;
 p.name = "Alice";
-p.age = 25;
+p.age = 30;
 p.city = "Rome";
 
-print(p.name, "is", p.age, "years old");
+print(p.name, "lives in", p.city);
 ```
 
 ### Arrays and Matrices
-
 ```c
-// Array (dictionary-based)
-arr = {};
-arr[0] = 10;
-arr[1] = 20;
-arr[2] = 30;
-print(arr[0]);  // Output: 10
-print(len(arr)); // Output: 3
+// 1D Array
+numbers = [10, 20, 30, 40, 50];
+print("First:", numbers[0]);
 
-// Matrix creation
-m = matrix(3, 3, 0);  // 3x3 matrix filled with 0
-
-// Access with C-style syntax
-m[0][0] = 1;
-m[1][1] = 5;
-print(m[1][1]);  // Output: 5
-
-// Or with comma syntax
-m[2, 2] = 9;
-print(m[2, 2]);  // Output: 9
-
-// Matrix info
-print(rows(m));  // Output: 3
-print(cols(m));  // Output: 3
-print(dim(m));   // Output: 2 (2D array)
+// 2D Matrix
+grid = matrix(3, 3, 0);
+grid[1, 1] = 99;
+print("Center:", grid[1, 1]);
 ```
 
 ### File I/O
-
 ```c
 // Write to file
-f = open("test.txt", "w");
-write(f, "Hello from Ascension!\n");
-write(f, "Second line\n");
+f = open("data.txt", "w");
+write(f, "Hello, File!\n");
 close(f);
 
-// Read entire file
-f = open("test.txt", "r");
+// Read from file
+f = open("data.txt", "r");
 content = read_all(f);
 print(content);
-close(f);
-
-// Read line by line
-f = open("data.txt", "r");
-line = read_line(f);
-while (line != NULL) {
-    print(line);
-    line = read_line(f);
-}
 close(f);
 ```
 
 ### HTTP Requests
-
 ```c
-// GET request
 response = http_get("https://api.github.com");
 status = response_status(response);
 body = response_body(response);
 print("Status:", status);
-
-// POST request
-data = {};
-data["name"] = "test";
-response = http_post("https://httpbin.org/post", data);
 ```
 
 ### TCP Sockets
-
 ```c
-// Create and connect socket
-sock = socket_create();
+sock = socket_open();
 socket_connect(sock, "example.com", 80);
 socket_send(sock, "GET / HTTP/1.0\r\n\r\n");
-response = socket_recv(sock, 4096);
-print(response);
+data = socket_recv(sock, 1024);
 socket_close(sock);
-
-// Server socket
-server = socket_create();
-socket_bind(server, "0.0.0.0", 8080);
-socket_listen(server, 5);
-client = socket_accept(server);
+print(data);
 ```
 
 ### GUI with Tkinter
-
 ```c
-// Create main window
-root = tk_root("My Application");
-tk_geometry("400x300");
-
-// Create widgets
-label = tk_widget(root, "Label", {"text": "Welcome!"});
-tk_pack(label, {"pady": 10});
-
-entry = tk_widget(root, "Entry", {});
-tk_pack(entry, {"pady": 5});
-
-func on_click() {
-    text = tk_get(entry);
-    tk_msgbox("Hello", text);
-}
-
-btn = tk_widget(root, "Button", {"text": "Click Me"});
-tk_command(btn, "on_click");
-tk_pack(btn, {"pady": 10});
-
-// Start event loop
-tk_mainloop();
+root = tk_root("My App", "400x300");
+label = tk_widget(root, "label", "text=Hello GUI!");
+tk_pack(label);
+button = tk_widget(root, "button", "text=Click Me");
+tk_pack(button);
+tk_mainloop(root);
 ```
 
 ### Terminal UI with Curses
-
 ```c
-curses_init();
-curses_clear();
-curses_move(5, 10);
-curses_write("Hello Terminal!");
-curses_refresh();
-
-key = curses_read_key();
-curses_end();
+scr = curses_init();
+curses_print(scr, 0, 0, "Press any key...");
+curses_refresh(scr);
+key = curses_getkey(scr);
+curses_end(scr);
+print("You pressed:", key);
 ```
 
 ### Error Handling
-
 ```c
 try {
-    result = 10 / 0;
-} catch (e) {
-    print("Error:", e);
-}
-
-// Or without capturing the error
-try {
-    f = open("nonexistent.txt", "r");
+    x = 10 / 0;
 } catch {
-    print("File not found!");
-}
-
-// Throw custom errors
-func divide(a, b) {
-    if (b == 0) {
-        throw "Division by zero!";
-    }
-    return a / b;
+    print("Caught an error!");
 }
 ```
 
 ### System Commands
-
 ```c
-// Execute command and get exit code
-exit_code = system("ls -la");
-print("Exit code:", exit_code);
+result = exec("ls -la");
+print(result);
 
-// Execute command and capture output
-output = exec("whoami");
-print("Current user:", output);
+system("echo 'Hello from shell!'");
 ```
 
 ### String Operations
-
 ```c
-text = "Hello World";
-print(len(text));           // Output: 11
-print(substr(text, 0, 5));  // Output: Hello
-print(chr(65));             // Output: A
-
-// Convert character to ASCII code
-code = to_int("A");
-print(code);  // Output: 65
+text = "Hello, World!";
+print("Length:", len(text));
+print("Substring:", substr(text, 0, 5));  // "Hello"
+print("Char code:", ord("A"));             // 65
+print("From code:", chr(65));              // "A"
 ```
 
-### Include Files
+---
+
+## 🧮 Math Functions (v12.7)
 
 ```c
-// main.asc
-include "utils.asc";
-include "config.asc";
+// Random numbers
+r = random();           // Float 0.0 - 1.0
+r = random(100);        // Int 0 - 99
+r = random(10, 20);     // Int 10 - 19
 
-result = helper_function();
+// Basic math
+print(sqrt(16));        // 4
+print(pow(2, 10));      // 1024
+print(abs(-42));        // 42
+print(floor(3.7));      // 3
+print(ceil(3.2));       // 4
+
+// Exponential and logarithm
+print(exp(1));          // 2.718... (e)
+print(log(E));          // 1.0
+
+// Trigonometry
+print(sin(PI / 2));     // 1.0
+print(cos(0));          // 1.0
+print(tan(PI / 4));     // 1.0
+print(atan2(1, 1));     // 0.785... (PI/4)
+
+// Constants
+print(PI);              // 3.14159...
+print(E);               // 2.71828...
 ```
+
+---
+
+## 🧠 Neural Network Library (v12.7)
+
+Ascension includes `neural_network.asc`, a library for building and training neural networks:
+
+```c
+include "lib/neural_network.asc";
+
+// Sigmoid activation
+print(sigmoid(0));      // 0.5
+print(sigmoid(5));      // ~0.99
+
+// Initialize MLP (2 inputs, 2 hidden, 1 output)
+mlp_init();
+
+// Train on XOR problem
+// ... training loop ...
+
+// Predict
+result = mlp_predict(1, 0);  // ~0.99 (XOR: 1)
+result = mlp_predict(1, 1);  // ~0.01 (XOR: 0)
+
+// Save/Load weights
+mlp_save_weights("xor_trained.weights");
+mlp_load_weights("xor_trained.weights");
+```
+
+### Features
+- Activation functions: `sigmoid`, `relu`, `step`, `tanh`
+- Single neuron implementation
+- Perceptron with training (AND/OR gates)
+- Multi-Layer Perceptron (MLP) with backpropagation
+- XOR problem solver (2-2-1 architecture)
+- Weight persistence (save/load to file)
+
+---
 
 ## 📚 Documentation
 
-Complete documentation is available in the `docs/` folder, including a comprehensive user manual covering all language features from basic variables to advanced networking and GUI programming.
+- [User Manual (PDF)](docs/ascension_manual.pdf) — Complete 21-chapter guide
+- [Shell Guide](README_SHELL.md) — Interactive REPL documentation
+- [Examples](ascension_examples/) — Sample programs
+
+---
 
 ## 🗂️ Project Structure
 
 ```
 ascension/
-├── ascension_12_6.py        # Main interpreter/compiler
-├── ascension_shell_12_6.py  # Interactive REPL shell
+├── ascension_12_7.py        # Main interpreter (v12.7 Math Edition)
+├── ascension_shell_12_7.py  # Interactive REPL shell
 ├── ascension_examples/      # Example programs
+│   ├── hello.asc
+│   ├── calculator.asc
+│   ├── fibonacci.asc
+│   ├── sieve.asc            # Sieve of Eratosthenes (tested on 1M numbers!)
+│   └── ...
+├── lib/                     # Libraries
+│   ├── neural_network.asc   # Neural network library
+│   └── nn_demo.asc          # Neural network demo
 ├── docs/                    # Documentation
-├── LICENSE                  # GPL-3.0 license
+│   └── ascension_manual.pdf
+├── LICENSE                  # GPL v3
 └── README.md
 ```
+
+---
 
 ## 🔧 Built-in Functions
 
 | Category | Functions |
 |----------|-----------|
-| **I/O** | `print()`, `read()` |
-| **Type Conversion** | `to_int()`, `to_float()` |
-| **String** | `len()`, `substr()`, `chr()` |
-| **Arrays** | `len()`, `keys()` |
-| **Matrix** | `matrix()`, `rows()`, `cols()`, `dim()` |
-| **File** | `open()`, `close()`, `write()`, `read_line()`, `read_all()` |
-| **Network** | `http_get()`, `http_post()`, `response_status()`, `response_body()` |
-| **Sockets** | `socket_create()`, `socket_connect()`, `socket_bind()`, `socket_listen()`, `socket_accept()`, `socket_send()`, `socket_recv()`, `socket_close()`, `get_ip()` |
-| **GUI** | `tk_root()`, `tk_widget()`, `tk_pack()`, `tk_grid()`, `tk_config()`, `tk_get()`, `tk_set()`, `tk_command()`, `tk_bind()`, `tk_mainloop()`, `tk_msgbox()`, and many more |
-| **Terminal** | `curses_init()`, `curses_end()`, `curses_clear()`, `curses_refresh()`, `curses_move()`, `curses_write()`, `curses_read_key()` |
-| **System** | `system()`, `exec()` |
+| **I/O** | `print`, `read` |
+| **Math** | `sqrt`, `pow`, `exp`, `log`, `abs`, `floor`, `ceil`, `random` |
+| **Trig** | `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `atan2` |
+| **String** | `len`, `substr`, `chr`, `ord`, `to_int`, `to_float` |
+| **Array** | `matrix`, `rows`, `cols`, `dim`, `keys` |
+| **File** | `open`, `close`, `read_line`, `read_all`, `write` |
+| **Network** | `http_get`, `http_post`, `response_status`, `response_body` |
+| **Socket** | `socket_open`, `socket_connect`, `socket_send`, `socket_recv`, `socket_close`, `socket_bind`, `socket_listen`, `socket_accept`, `get_ip` |
+| **GUI** | `tk_root`, `tk_widget`, `tk_pack`, `tk_grid`, `tk_bind`, `tk_mainloop`, `tk_canvas_*`, `tk_dialog_*` |
+| **TUI** | `curses_init`, `curses_end`, `curses_print`, `curses_refresh`, `curses_getkey`, `curses_clear` |
+| **System** | `system`, `exec` |
 
-## 🔑 Keywords and Values
+---
 
-| Type | Values |
-|------|--------|
-| **Boolean** | `true`, `false` |
-| **Null** | `NULL` |
+## 🔑 Keywords
+
+| Category | Keywords |
+|----------|----------|
 | **Control** | `if`, `else`, `for`, `while`, `switch`, `case`, `default`, `break`, `continue` |
 | **Functions** | `func`, `return` |
-| **Error Handling** | `try`, `catch`, `throw` |
-| **Data** | `struct`, `new`, `global` |
-| **Other** | `include` |
+| **Data** | `struct`, `new`, `null`, `true`, `false` |
+| **Error** | `try`, `catch`, `throw` |
+| **Module** | `include` |
+| **Constants** | `PI`, `E` |
 
-## 🤝 Contributing
+---
 
-Contributions are welcome! Feel free to:
+## 🏆 Stress Tests Passed
 
-- Report bugs
-- Suggest new features  
-- Submit pull requests
+- ✅ **Sieve of Eratosthenes** — 1,000,000 numbers, found all 78,498 primes up to 999,983
+- ✅ **Neural Network XOR** — MLP 2-2-1 with backpropagation
+- ✅ **Recursive Fibonacci** — Deep recursion handling
+- ✅ **Nested loops** — Complex iteration patterns
 
-## 📄 License
+---
 
-This project is licensed under the **GPL-3.0 License** — see the [LICENSE](LICENSE) file for details.
+## 📜 Version History
+
+| Version | Name | Highlights |
+|---------|------|------------|
+| 12.7 | Math Edition | 17 math functions, neural network library, PI/E constants |
+| 12.6 | Substr Edition | `substr()`, `chr()` string functions |
+| 12.5 | String Edition | Enhanced string operations |
+| 12.4 | System Edition | `system()`, `exec()` commands |
+| 12.3 | Matrix Edition | 2D arrays, `matrix()` function |
+
+---
 
 ## 👤 Author
 
-**EdeFede** ([@edefede](https://github.com/edefede))
+**EdeFede** — [GitHub](https://github.com/edefede)
+
+---
+
+## 📄 License
+
+This project is licensed under the **GPL v3** License. See [LICENSE](LICENSE) for details.
 
 ---
 
 <p align="center">
-  <sub>Built with ❤️ and Python</sub>
+  Made with ❤️ and Python
 </p>
-
-
-
 
 
