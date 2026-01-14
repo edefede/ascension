@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
 Ascension Shell - REPL Interattivo
-Versione 1.3 (Substr Edition)
+Versione 1.4 (Math Edition)
 
 Una shell interattiva per testare codice Ascension in tempo reale.
 
 Uso:
-    python3 ascension_shell_12_6.py
+    python3 ascension_shell_12_7.py
 
 Comandi speciali:
     .help     - Mostra aiuto
@@ -22,9 +22,13 @@ Comandi speciali:
     .debug    - Toggle modalità debug (mostra bytecode)
     .quit     - Esci (oppure Ctrl+D)
 
-Novità v1.3 (Ascension 12.6):
-    - substr(string, start, length): estrae sottostringa
-    - chr(code): converte codice ASCII in carattere
+Novità v1.4 (Ascension 12.7 Math Edition):
+    - random(): numeri casuali (float, int, range)
+    - sqrt(), pow(), exp(), log(): funzioni matematiche
+    - abs(), floor(), ceil(): arrotondamenti
+    - sin(), cos(), tan(): trigonometria
+    - asin(), acos(), atan(), atan2(): inverse
+    - PI, E: costanti matematiche
 
 Copyright (C) 2025 Ascension Lang - GPL v3
 """
@@ -36,15 +40,15 @@ import atexit
 
 # Importa Ascension
 try:
-    from ascension_12_6 import AscensionCompiler, AscensionVM, AscensionException
-    ASCENSION_VERSION = "12.6 (Substr Edition)"
+    from ascension_12_7 import AscensionCompiler, AscensionVM, AscensionException
+    ASCENSION_VERSION = "12.7 (Math Edition)"
 except ImportError:
     try:
         from ascension import AscensionCompiler, AscensionVM, AscensionException
         ASCENSION_VERSION = "unknown"
     except ImportError:
         print("Errore: impossibile importare Ascension.")
-        print("Assicurati che ascension_12_6.py sia nella stessa directory.")
+        print("Assicurati che ascension_12_7.py sia nella stessa directory.")
         sys.exit(1)
 
 
@@ -77,7 +81,7 @@ class AscensionShell:
 
         atexit.register(self._save_history)
 
-        # Autocompletamento base - aggiornato v12.6
+        # Autocompletamento base - aggiornato v12.7 Math Edition
         keywords = [
             # Parole chiave
             'if', 'else', 'while', 'for', 'func', 'return', 'struct',
@@ -91,8 +95,14 @@ class AscensionShell:
             'matrix', 'rows', 'cols', 'dim',
             # System commands
             'system', 'exec',
-            # NUOVO v12.6: Stringhe
+            # Stringhe (v12.6)
             'substr', 'chr',
+            # NUOVO v12.7: Math functions
+            'random', 'sqrt', 'pow', 'exp', 'log',
+            'abs', 'floor', 'ceil',
+            'sin', 'cos', 'tan',
+            'asin', 'acos', 'atan', 'atan2',
+            'PI', 'E',
             # File I/O
             'open', 'close', 'write', 'read_line', 'read_all',
             # HTTP
@@ -141,7 +151,7 @@ class AscensionShell:
         print()
         print("╔═══════════════════════════════════════════════════════════╗")
         print("║           ASCENSION SHELL - REPL Interattivo              ║")
-        print("║              Versione 1.3 (Substr Edition)                ║")
+        print("║               Versione 1.4 (Math Edition)                 ║")
         print("╠═══════════════════════════════════════════════════════════╣")
         print(f"║  Ascension VM: {ASCENSION_VERSION:<43} ║")
         print("║  Digita .help per aiuto, .quit per uscire                 ║")
@@ -182,10 +192,31 @@ VALORI SPECIALI:
   true, false               Valori booleani (1 e 0)
   NULL                       Valore nullo (distinto da 0)
 
-STRINGHE (v12.6):
+STRINGHE:
   substr(str, start, len)   Estrae sottostringa
   chr(code)                 Converte codice ASCII in carattere
   to_int("A")               Ottiene codice ASCII (65)
+
+FUNZIONI MATEMATICHE (v12.7):
+  random()                  Float casuale tra 0.0 e 1.0
+  random(max)               Int casuale tra 0 e max-1
+  random(min, max)          Int casuale tra min e max-1
+  sqrt(x)                   Radice quadrata
+  pow(base, exp)            Potenza
+  exp(x)                    e^x (esponenziale)
+  log(x)                    Logaritmo naturale
+  abs(x)                    Valore assoluto
+  floor(x)                  Arrotonda per difetto
+  ceil(x)                   Arrotonda per eccesso
+
+TRIGONOMETRIA (v12.7):
+  sin(x), cos(x), tan(x)    Funzioni trigonometriche
+  asin(x), acos(x), atan(x) Funzioni inverse
+  atan2(y, x)               Arcotangente a due argomenti
+
+COSTANTI (v12.7):
+  PI                        3.14159265358979...
+  E                         2.71828182845904...
 
 ARRAY MULTIDIMENSIONALI:
   m = matrix(3, 4, 0);       Crea matrice 3x4 inizializzata a 0
@@ -218,6 +249,22 @@ ESEMPI:
 
   a§c> print(chr(65));
   OUTPUT > A
+
+  a§c> print(sqrt(16));
+  OUTPUT > 4
+
+  a§c> print(sin(PI / 2));
+  OUTPUT > 1.0
+
+  a§c> r = random();
+  a§c> print(r);
+  OUTPUT > 0.7234...
+
+  a§c> func sigmoid(x) {
+  ...>     return 1.0 / (1.0 + exp(0 - x));
+  ...> }
+  a§c> print(sigmoid(0));
+  OUTPUT > 0.5
 """)
 
     def cmd_clear(self):
@@ -238,30 +285,43 @@ ESEMPI:
         for name, value in sorted(self.vm.global_memory.items()):
             if not name.startswith('__'):
                 if isinstance(value, dict):
-                    if value.get('__matrix__'):
-                        type_str = f"matrix({value.get('__rows__', '?')}x{value.get('__cols__', '?')})"
-                    elif value.get('__type__'):
-                        type_str = f"struct {value.get('__type__')}"
+                    if '__struct__' in value:
+                        print(f"  {name} = <struct {value['__struct__']}>")
+                    elif '__matrix__' in value:
+                        rows = value.get('__rows__', '?')
+                        cols = value.get('__cols__', '?')
+                        print(f"  {name} = <matrix {rows}x{cols}>")
                     else:
-                        type_str = f"array[{len([k for k in value if not str(k).startswith('__')])}]"
-                    val_repr = type_str
-                elif value is None:
-                    val_repr = "NULL"
+                        print(f"  {name} = {value}")
+                elif isinstance(value, list):
+                    if len(value) > 5:
+                        preview = str(value[:5])[:-1] + ", ...]"
+                        print(f"  {name} = {preview} (len={len(value)})")
+                    else:
+                        print(f"  {name} = {value}")
                 elif isinstance(value, str):
-                    val_repr = repr(value)
+                    if len(value) > 40:
+                        print(f'  {name} = "{value[:40]}..." (len={len(value)})')
+                    else:
+                        print(f'  {name} = "{value}"')
                 else:
-                    val_repr = str(value)
-                
-                if len(val_repr) > 50:
-                    val_repr = val_repr[:47] + "..."
-                print(f"  {name} = {val_repr}")
+                    print(f"  {name} = {value}")
         print()
 
     def cmd_funcs(self):
         """Mostra funzioni definite"""
-        funcs = [label for label in self.vm.labels.keys()
-                 if not label.startswith('L') and not label.startswith('_')
-                 and not any(label.startswith(x) for x in ['skip', 'ws', 'we', 'fs', 'fe', 'if_', 'next_', 'elif_', 'es', 'nc', 'c', 'e'])]
+        funcs = {}
+
+        for i, op in enumerate(self.vm.program):
+            if op[0] == 'LABEL' and op[1].startswith('func_'):
+                func_name = op[1][5:]
+                funcs[func_name] = i
+
+        for label in self.vm.labels:
+            if label.startswith('func_'):
+                func_name = label[5:]
+                if func_name not in funcs:
+                    funcs[func_name] = self.vm.labels[label]
 
         if not funcs:
             print("Nessuna funzione definita.")
@@ -269,14 +329,8 @@ ESEMPI:
 
         print("\nFunzioni definite:")
         print("─" * 40)
-        for func in sorted(funcs):
-            # Mostra argomenti se disponibili
-            if func in self.compiler.function_prototypes:
-                args = self.compiler.function_prototypes[func]
-                args_str = ", ".join(args) if args else ""
-                print(f"  {func}({args_str})")
-            else:
-                print(f"  {func}()")
+        for name in sorted(funcs.keys()):
+            print(f"  func {name}()")
         print()
 
     def cmd_structs(self):
@@ -288,67 +342,37 @@ ESEMPI:
         print("\nStruct definite:")
         print("─" * 40)
         for name, fields in sorted(self.compiler.structs.items()):
-            print(f"  struct {name} {{ {', '.join(fields)} }}")
+            fields_str = ", ".join(fields)
+            print(f"  struct {name} {{ {fields_str} }}")
         print()
 
     def cmd_matrices(self):
         """Mostra matrici definite"""
         matrices = {}
-        arrays = {}
-        
         for name, value in self.vm.global_memory.items():
-            if name.startswith('__'):
-                continue
-            if isinstance(value, dict):
-                if value.get('__matrix__'):
-                    matrices[name] = value
-                elif not value.get('__type__'):
-                    arrays[name] = value
-        
-        if not matrices and not arrays:
-            print("Nessuna matrice o array definito.")
+            if isinstance(value, dict) and '__matrix__' in value:
+                rows = value.get('__rows__', '?')
+                cols = value.get('__cols__', '?')
+                matrices[name] = (rows, cols)
+
+        if not matrices:
+            print("Nessuna matrice definita.")
             return
 
-        if matrices:
-            print("\nMatrici (2D):")
-            print("─" * 50)
-            for name, mat in sorted(matrices.items()):
-                rows = mat.get('__rows__', 0)
-                cols = mat.get('__cols__', 0)
-                print(f"  {name}: {rows}x{cols}")
-                if rows <= 4 and cols <= 6:
-                    for r in range(rows):
-                        row_vals = [str(mat.get(f"{r},{c}", 0)) for c in range(cols)]
-                        print(f"    [{', '.join(row_vals)}]")
-            print()
-
-        if arrays:
-            print("\nArray (1D):")
-            print("─" * 50)
-            for name, arr in sorted(arrays.items()):
-                size = len([k for k in arr if not str(k).startswith('__')])
-                preview = []
-                for i in range(min(5, size)):
-                    val = arr.get(i, '?')
-                    if val is None:
-                        preview.append("NULL")
-                    elif isinstance(val, str):
-                        preview.append(repr(val))
-                    else:
-                        preview.append(str(val))
-                if size > 5:
-                    preview.append('...')
-                print(f"  {name}[{size}]: [{', '.join(preview)}]")
-            print()
+        print("\nMatrici definite:")
+        print("─" * 40)
+        for name, (rows, cols) in sorted(matrices.items()):
+            print(f"  {name} = matrix({rows}, {cols})")
+        print()
 
     def cmd_protos(self):
-        """Mostra prototipi funzione registrati"""
-        if not self.compiler.function_prototypes:
-            print("Nessun prototipo funzione registrato.")
+        """Mostra prototipi funzione"""
+        if not hasattr(self.compiler, 'function_prototypes') or not self.compiler.function_prototypes:
+            print("Nessun prototipo registrato.")
             return
 
         print("\nPrototipi funzione:")
-        print("─" * 50)
+        print("─" * 40)
         for name, args in sorted(self.compiler.function_prototypes.items()):
             args_str = ", ".join(args) if args else ""
             status = "✓ definita" if name in self.compiler.function_defined else "○ solo prototipo"
@@ -393,7 +417,7 @@ ESEMPI:
         try:
             with open(filename, 'w') as f:
                 f.write("// Sessione Ascension Shell\n")
-                f.write("// Versione: 1.3 (Substr Edition)\n")
+                f.write("// Versione: 1.4 (Math Edition)\n")
                 f.write("// " + "=" * 40 + "\n\n")
                 f.write('\n'.join(self.session_code))
                 f.write('\n')
