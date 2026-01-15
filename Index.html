@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ascension Programming Language | EdeFede</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --dark: #1e293b;
+            --light: #f1f5f9;
+            --accent: #06b6d4;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -2px;
+        }
+
+        .edefede {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            font-weight: 600;
+            border-left: 2px solid var(--secondary);
+            padding-left: 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 0;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Features Section */
+        .features {
+            background: white;
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--dark);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            border-radius: 15px;
+            background: var(--light);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Code Example Section */
+        .code-example {
+            background: var(--dark);
+            color: white;
+            padding: 5rem 0;
+        }
+
+        .code-container {
+            background: #0f172a;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            overflow-x: auto;
+        }
+
+        pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .code-line {
+            display: block;
+            line-height: 1.8;
+        }
+
+        .keyword { color: #c678dd; }
+        .function { color: #61afef; }
+        .string { color: #98c379; }
+        .number { color: #d19a66; }
+        .comment { color: #5c6370; font-style: italic; }
+
+        /* Stats Section */
+        .stats {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 4rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .footer-section a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .tagline {
+                font-size: 1.2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="brand">
+                <div class="logo">A§C</div>
+                <div class="edefede">EdeFede</div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#examples">Examples</a></li>
+                <li><a href="#docs">Docs</a></li>
+                <li><a href="https://github.com/edefede/ascension" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Ascension</h1>
+            <p class="tagline">Il linguaggio di programmazione educativo con sintassi C-like</p>
+            <div class="cta-buttons">
+                <a href="https://github.com/edefede/ascension" class="btn btn-primary">Get Started</a>
+                <a href="#examples" class="btn btn-secondary">View Examples</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Potente e Versatile</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Stack-Based VM</h3>
+                    <p>Virtual machine basata su stack con bytecode ottimizzato per performance ed efficienza</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>GUI Support</h3>
+                    <p>Interfacce grafiche integrate con Tkinter, crea applicazioni desktop moderne</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Networking</h3>
+                    <p>Supporto completo per HTTP e TCP, costruisci applicazioni di rete robuste</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧮</div>
+                    <h3>Math Edition</h3>
+                    <p>17 funzioni matematiche: trigonometria, logaritmi, random, e molto altro</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Neural Networks</h3>
+                    <p>Libreria completa per reti neurali con backpropagation e training</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Rich Features</h3>
+                    <p>Struct, array, matrici, exception handling, file I/O, e terminal UI</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="examples" class="code-example">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">Code Examples</h2>
+            <div class="code-container">
+                <pre><code><span class="comment">// Crivello di Eratostene</span>
+<span class="keyword">func</span> <span class="function">crivello</span>(n) {
+    <span class="keyword">array</span> primi[n];
+
+    <span class="comment">// Inizializza tutti a 1 (primi)</span>
+    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i = i + <span class="number">1</span>) {
+        primi[i] = <span class="number">1</span>;
+    }
+
+    <span class="comment">// 0 e 1 non sono primi</span>
+    primi[<span class="number">0</span>] = <span class="number">0</span>;
+    primi[<span class="number">1</span>] = <span class="number">0</span>;
+
+    <span class="comment">// Setaccia</span>
+    <span class="keyword">for</span> (i = <span class="number">2</span>; i &lt; n; i = i + <span class="number">1</span>) {
+        <span class="keyword">if</span> (primi[i] == <span class="number">1</span>) {
+            <span class="comment">// Elimina tutti i multipli di i</span>
+            <span class="keyword">for</span> (j = i + i; j &lt; n; j = j + i) {
+                primi[j] = <span class="number">0</span>;
+            }
+        }
+    }
+
+    <span class="comment">// Stampa i primi</span>
+    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i = i + <span class="number">1</span>) {
+        <span class="keyword">if</span> (primi[i] == <span class="number">1</span>) {
+            <span class="function">print</span>(i);
+        }
+    }
+}
+
+<span class="comment">// Provalo con 100, poi 1000, 10000, 1000000!</span>
+<span class="function">crivello</span>(<span class="number">100</span>);</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>12.7</h3>
+                    <p>Version "Math Edition"</p>
+                </div>
+                <div class="stat-item">
+                    <h3>17+</h3>
+                    <p>Math Functions</p>
+                </div>
+                <div class="stat-item">
+                    <h3>21</h3>
+                    <p>Documentation Chapters</p>
+                </div>
+                <div class="stat-item">
+                    <h3>100%</h3>
+                    <p>Open Source</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Ascension</h4>
+                    <p>Un linguaggio di programmazione educativo con sintassi C-like, virtual machine stack-based e supporto completo per GUI, networking, e neural networks.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="https://github.com/edefede/ascension">GitHub Repository</a>
+                    <a href="https://github.com/edefede/ascension/blob/main/README.md">Documentation</a>
+                    <a href="https://github.com/edefede/ascension/tree/main/examples">Examples</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <a href="https://github.com/edefede/ascension/blob/main/MANUALE_UTENTE.md">User Manual</a>
+                    <a href="https://github.com/edefede/ascension/tree/main/neural_network">Neural Network Library</a>
+                    <a href="https://github.com/edefede/ascension/issues">Report Issues</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EdeFede | Ascension Programming Language | Licensed under GPL v3</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animated counters for stats
+        const animateCounter = (element, target) => {
+            let current = 0;
+            const increment = target / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 20);
+        };
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
