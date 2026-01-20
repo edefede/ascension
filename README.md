@@ -1,12 +1,47 @@
-<p align="center">
-  <h1 align="center">🚀 Ascension</h1>
-  <p align="center">
-    <strong>A lightweight, interpreted programming language written in Python</strong><br>
-    C-like syntax • No explicit typing • Built-in GUI, Networking, Neural Networks
-  </p>
-</p>
+# 🚀 Ascension
 
----
+**A lightweight, interpreted programming language**  
+C-like syntax • No explicit typing • Built-in GUI, Networking, Neural Networks
+
+![Version](https://img.shields.io/badge/version-12.7-green?style=flat-square)
+![License](https://img.shields.io/badge/license-GPL--3.0-orange?style=flat-square)
+![Python](https://img.shields.io/badge/python-3.x-blue?style=flat-square)
+![C++](https://img.shields.io/badge/C%2B%2B-17-blue?style=flat-square)
+
+> **"Ascension IS the syntax"** — The same language, multiple implementations.
+
+Ascension is an educational programming language with C-like syntax and dynamic typing. Write once, run on **Python** (reference implementation) or **C++** (high-performance port).
+
+## 🎯 Two Implementations, One Language
+
+Ascension is **the syntax**. The implementation is just how you run it:
+
+### 🐍 Python (Reference Implementation)
+```bash
+# Run a program
+python3 ascension_12_7.py examples/hello.asc
+
+# Interactive shell
+python3 ascension_shell_12_7.py
+```
+Full-featured, batteries-included, perfect for rapid development.
+
+### ⚡ C++ (High Performance)
+```bash
+# Compile
+g++ -std=c++17 cpp/ascension.cpp -o ascension
+
+# With optional features
+g++ -std=c++17 -DHAS_CURSES -DHAS_NETWORK cpp/ascension.cpp -o ascension -lncurses
+
+# Run
+./ascension examples/hello.asc
+```
+Header-only modular design, 15% more compact, blazing fast.
+
+**Compile Flags:**
+- `-DHAS_CURSES` — Terminal UI support (requires ncurses)
+- `-DHAS_NETWORK` — HTTP and socket networking
 
 ## ✨ Features
 
@@ -20,35 +55,17 @@
 - **Math Functions** — Trigonometry, random, exponentials (v12.7)
 - **Neural Networks** — Built-in library for ML experiments (v12.7)
 
----
-
-## 🚀 Quick Start
-
-```bash
-# Clone the repository
-git clone https://github.com/edefede/ascension.git
-cd ascension
-
-# Run a program
-python3 ascension_12_7.py examples/hello.asc
-
-# Or use the interactive shell
-python3 ascension_shell_12_7.py
-```
-
----
-
 ## 📝 Examples
 
 ### Variables and Output
-```c
+```ascension
 name = "Ascension";
 version = 12.7;
 print("Welcome to", name, "v" + version);
 ```
 
 ### Functions
-```c
+```ascension
 func factorial(n) {
     if (n <= 1) {
         return 1;
@@ -60,7 +77,7 @@ print("5! =", factorial(5));  // Output: 120
 ```
 
 ### Control Flow
-```c
+```ascension
 for (i = 0; i < 5; i += 1) {
     if (i % 2 == 0) {
         print(i, "is even");
@@ -71,7 +88,7 @@ for (i = 0; i < 5; i += 1) {
 ```
 
 ### Structs
-```c
+```ascension
 struct Person { name, age, city };
 
 p = new Person;
@@ -83,7 +100,7 @@ print(p.name, "lives in", p.city);
 ```
 
 ### Arrays and Matrices
-```c
+```ascension
 // 1D Array
 numbers = [10, 20, 30, 40, 50];
 print("First:", numbers[0]);
@@ -95,7 +112,7 @@ print("Center:", grid[1, 1]);
 ```
 
 ### File I/O
-```c
+```ascension
 // Write to file
 f = open("data.txt", "w");
 write(f, "Hello, File!\n");
@@ -109,7 +126,7 @@ close(f);
 ```
 
 ### HTTP Requests
-```c
+```ascension
 response = http_get("https://api.github.com");
 status = response_status(response);
 body = response_body(response);
@@ -117,7 +134,7 @@ print("Status:", status);
 ```
 
 ### TCP Sockets
-```c
+```ascension
 sock = socket_open();
 socket_connect(sock, "example.com", 80);
 socket_send(sock, "GET / HTTP/1.0\r\n\r\n");
@@ -127,7 +144,7 @@ print(data);
 ```
 
 ### GUI with Tkinter
-```c
+```ascension
 root = tk_root("My App", "400x300");
 label = tk_widget(root, "label", "text=Hello GUI!");
 tk_pack(label);
@@ -137,7 +154,7 @@ tk_mainloop(root);
 ```
 
 ### Terminal UI with Curses
-```c
+```ascension
 scr = curses_init();
 curses_print(scr, 0, 0, "Press any key...");
 curses_refresh(scr);
@@ -147,7 +164,7 @@ print("You pressed:", key);
 ```
 
 ### Error Handling
-```c
+```ascension
 try {
     x = 10 / 0;
 } catch {
@@ -156,7 +173,7 @@ try {
 ```
 
 ### System Commands
-```c
+```ascension
 result = exec("ls -la");
 print(result);
 
@@ -164,7 +181,7 @@ system("echo 'Hello from shell!'");
 ```
 
 ### String Operations
-```c
+```ascension
 text = "Hello, World!";
 print("Length:", len(text));
 print("Substring:", substr(text, 0, 5));  // "Hello"
@@ -172,11 +189,9 @@ print("Char code:", ord("A"));             // 65
 print("From code:", chr(65));              // "A"
 ```
 
----
-
 ## 🧮 Math Functions (v12.7)
 
-```c
+```ascension
 // Random numbers
 r = random();           // Float 0.0 - 1.0
 r = random(100);        // Int 0 - 99
@@ -204,13 +219,11 @@ print(PI);              // 3.14159...
 print(E);               // 2.71828...
 ```
 
----
-
 ## 🧠 Neural Network Library (v12.7)
 
 Ascension includes `neural_network.asc`, a library for building and training neural networks:
 
-```c
+```ascension
 include "lib/neural_network.asc";
 
 // Sigmoid activation
@@ -232,46 +245,13 @@ mlp_save_weights("xor_trained.weights");
 mlp_load_weights("xor_trained.weights");
 ```
 
-### Features
-- Activation functions: `sigmoid`, `relu`, `step`, `tanh`
+**Features:**
+- Activation functions: sigmoid, relu, step, tanh
 - Single neuron implementation
 - Perceptron with training (AND/OR gates)
 - Multi-Layer Perceptron (MLP) with backpropagation
 - XOR problem solver (2-2-1 architecture)
 - Weight persistence (save/load to file)
-
----
-
-## 📚 Documentation
-
-- [User Manual (PDF)](docs/ascension_manual.pdf) — Complete 21-chapter guide
-- [Shell Guide](README_SHELL.md) — Interactive REPL documentation
-- [Examples](ascension_examples/) — Sample programs
-
----
-
-## 🗂️ Project Structure
-
-```
-ascension/
-├── ascension_12_7.py        # Main interpreter (v12.7 Math Edition)
-├── ascension_shell_12_7.py  # Interactive REPL shell
-├── ascension_examples/      # Example programs
-│   ├── hello.asc
-│   ├── calculator.asc
-│   ├── fibonacci.asc
-│   ├── sieve.asc            # Sieve of Eratosthenes (tested on 1M numbers!)
-│   └── ...
-├── lib/                     # Libraries
-│   ├── neural_network.asc   # Neural network library
-│   └── nn_demo.asc          # Neural network demo
-├── docs/                    # Documentation
-│   └── ascension_manual.pdf
-├── LICENSE                  # GPL v3
-└── README.md
-```
-
----
 
 ## 🔧 Built-in Functions
 
@@ -289,8 +269,6 @@ ascension/
 | **TUI** | `curses_init`, `curses_end`, `curses_print`, `curses_refresh`, `curses_getkey`, `curses_clear` |
 | **System** | `system`, `exec` |
 
----
-
 ## 🔑 Keywords
 
 | Category | Keywords |
@@ -302,43 +280,76 @@ ascension/
 | **Module** | `include` |
 | **Constants** | `PI`, `E` |
 
----
-
 ## 🏆 Stress Tests Passed
 
-- ✅ **Sieve of Eratosthenes** — 1,000,000 numbers, found all 78,498 primes up to 999,983
-- ✅ **Neural Network XOR** — MLP 2-2-1 with backpropagation
-- ✅ **Recursive Fibonacci** — Deep recursion handling
-- ✅ **Nested loops** — Complex iteration patterns
+✅ **Sieve of Eratosthenes** — 1,000,000 numbers, found all 78,498 primes up to 999,983  
+✅ **Neural Network XOR** — MLP 2-2-1 with backpropagation  
+✅ **Recursive Fibonacci** — Deep recursion handling  
+✅ **Nested loops** — Complex iteration patterns
 
----
+## 🗂️ Project Structure
+
+```
+ascension/
+├── ascension_12_7.py        # Main interpreter (v12.7 Math Edition)
+├── ascension_shell_12_7.py  # Interactive REPL shell
+├── cpp/                     # C++ implementation
+│   ├── ascension.cpp        # Main C++ interpreter
+│   ├── value.hpp            # Value types
+│   ├── compiler.hpp         # Bytecode compiler
+│   ├── vm.hpp               # Virtual machine
+│   └── modules/             # Optional modules
+│       ├── mod_fileio.hpp   # File I/O (always included)
+│       ├── mod_curses.hpp   # Terminal UI (optional)
+│       └── mod_network.hpp  # HTTP/Sockets (optional)
+├── ascension_examples/      # Example programs
+│   ├── hello.asc
+│   ├── calculator.asc
+│   ├── fibonacci.asc
+│   ├── sieve.asc            # Sieve of Eratosthenes (tested on 1M numbers!)
+│   └── ...
+├── lib/                     # Libraries
+│   ├── neural_network.asc   # Neural network library
+│   └── nn_demo.asc          # Neural network demo
+├── docs/                    # Documentation
+│   └── ascension_manual.pdf
+├── LICENSE                  # GPL v3
+└── README.md
+```
+
+## 📚 Documentation
+
+- **User Manual (PDF)** — Complete 21-chapter guide
+- **Shell Guide** — Interactive REPL documentation
+- **Examples** — Sample programs
 
 ## 📜 Version History
 
 | Version | Name | Highlights |
 |---------|------|------------|
-| 12.7 | Math Edition | 17 math functions, neural network library, PI/E constants |
+| **12.7** | **Math Edition** | 17 math functions, neural network library, PI/E constants |
 | 12.6 | Substr Edition | `substr()`, `chr()` string functions |
 | 12.5 | String Edition | Enhanced string operations |
 | 12.4 | System Edition | `system()`, `exec()` commands |
 | 12.3 | Matrix Edition | 2D arrays, `matrix()` function |
 
----
-
 ## 👤 Author
 
 **EdeFede** — [GitHub](https://github.com/edefede)
 
----
+Created through "vibe coding" with LLMs, exploring programming language development and generative thinking patterns.
 
 ## 📄 License
 
-This project is licensed under the **GPL v3** License. See [LICENSE](LICENSE) for details.
+This project is licensed under the **GPL v3 License**. See LICENSE for details.
 
 ---
 
-<p align="center">
-  Made with ❤️ and Python
-</p>
+**Remember**: Whether you choose Python for rapid development or C++ for performance, you're writing the same Ascension language. The implementation is just a detail — **Ascension IS the syntax**.
 
-
+```ascension
+// The same code runs on both implementations
+func main() {
+    print("One language. Multiple runtimes. Infinite possibilities.");
+}
+```
