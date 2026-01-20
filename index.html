@@ -105,9 +105,17 @@
 
         .hero .tagline {
             font-size: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 0.5rem;
             opacity: 0.9;
             animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            font-style: italic;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
         }
 
         .cta-buttons {
@@ -150,9 +158,86 @@
             color: var(--primary);
         }
 
+        /* Implementations Section */
+        .implementations {
+            background: white;
+            padding: 5rem 0;
+        }
+
+        .impl-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .impl-card {
+            padding: 2.5rem;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--light), white);
+            border: 3px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .impl-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.2);
+        }
+
+        .impl-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .impl-badge {
+            font-size: 0.9rem;
+            padding: 0.3rem 0.8rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 20px;
+        }
+
+        .impl-card p {
+            margin-bottom: 1.5rem;
+            color: #64748b;
+        }
+
+        .impl-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .impl-features li {
+            padding: 0.5rem 0;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .impl-features li:before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .code-snippet {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
         /* Features Section */
         .features {
-            background: white;
+            background: var(--light);
             padding: 5rem 0;
         }
 
@@ -172,7 +257,7 @@
         .feature-card {
             padding: 2rem;
             border-radius: 15px;
-            background: var(--light);
+            background: white;
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
@@ -308,6 +393,10 @@
             .nav-links {
                 display: none;
             }
+
+            .impl-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -319,9 +408,9 @@
                 <div class="edefede">EdeFede</div>
             </div>
             <ul class="nav-links">
+                <li><a href="#implementations">Implementations</a></li>
                 <li><a href="#features">Features</a></li>
                 <li><a href="#examples">Examples</a></li>
-                <li><a href="#docs">Docs</a></li>
                 <li><a href="https://github.com/edefede/ascension" target="_blank">GitHub</a></li>
             </ul>
         </nav>
@@ -331,9 +420,65 @@
         <div class="container">
             <h1>Ascension</h1>
             <p class="tagline">Il linguaggio di programmazione educativo con sintassi C-like</p>
+            <p class="subtitle">"Ascension IS the syntax" — Un linguaggio, molteplici runtime</p>
             <div class="cta-buttons">
                 <a href="https://github.com/edefede/ascension" class="btn btn-primary">Get Started</a>
                 <a href="#examples" class="btn btn-secondary">View Examples</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="implementations" class="implementations">
+        <div class="container">
+            <h2 class="section-title">Due Implementazioni, Un Linguaggio</h2>
+            <p style="text-align: center; font-size: 1.2rem; color: #64748b; margin-bottom: 1rem;">
+                Ascension è la <strong>sintassi</strong>. L'implementazione è solo il modo in cui la esegui.
+            </p>
+            <div class="impl-grid">
+                <div class="impl-card">
+                    <h3>
+                        🐍 Python
+                        <span class="impl-badge">Reference</span>
+                    </h3>
+                    <p>L'implementazione originale, completa di tutte le funzionalità.</p>
+                    <ul class="impl-features">
+                        <li>Stack-based virtual machine</li>
+                        <li>Interactive REPL shell</li>
+                        <li>Debugging completo</li>
+                        <li>Tutte le librerie standard</li>
+                        <li>Sviluppo rapido</li>
+                    </ul>
+                    <div class="code-snippet">
+# Esegui un programma<br>
+python3 ascension_12_7.py hello.asc<br>
+<br>
+# Shell interattiva<br>
+python3 ascension_shell_12_7.py
+                    </div>
+                </div>
+
+                <div class="impl-card">
+                    <h3>
+                        ⚡ C++
+                        <span class="impl-badge">Performance</span>
+                    </h3>
+                    <p>Port ad alte prestazioni con architettura modulare header-only.</p>
+                    <ul class="impl-features">
+                        <li>15% più compatto del Python</li>
+                        <li>Design modulare (value/compiler/vm)</li>
+                        <li>Moduli opzionali via flag</li>
+                        <li>Zero dipendenze (core)</li>
+                        <li>Velocità nativa</li>
+                    </ul>
+                    <div class="code-snippet">
+# Compilazione base<br>
+g++ -std=c++17 cpp/ascension.cpp -o ascension<br>
+<br>
+# Con feature opzionali<br>
+g++ -std=c++17 -DHAS_CURSES -DHAS_NETWORK \\<br>
+    cpp/ascension.cpp -o ascension -lncurses
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -368,9 +513,9 @@
                     <p>Libreria completa per reti neurali con backpropagation e training</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">📚</div>
-                    <h3>Rich Features</h3>
-                    <p>Struct, array, matrici, exception handling, file I/O, e terminal UI</p>
+                    <div class="feature-icon">⚡</div>
+                    <h3>Multiple Runtimes</h3>
+                    <p>Scegli Python per sviluppo rapido o C++ per massime performance</p>
                 </div>
             </div>
         </div>
@@ -379,6 +524,9 @@
     <section id="examples" class="code-example">
         <div class="container">
             <h2 class="section-title" style="color: white;">Code Examples</h2>
+            <p style="text-align: center; color: rgba(255,255,255,0.8); margin-bottom: 1rem;">
+                Lo stesso codice gira su entrambe le implementazioni!
+            </p>
             <div class="code-container">
                 <pre><code><span class="comment">// Crivello di Eratostene</span>
 <span class="keyword">func</span> <span class="function">crivello</span>(n) {
@@ -411,7 +559,7 @@
     }
 }
 
-<span class="comment">// Provalo con 100, poi 1000, 10000, 1000000!</span>
+<span class="comment">// Testato su Python E C++ con 1.000.000 di numeri!</span>
 <span class="function">crivello</span>(<span class="number">100</span>);</code></pre>
             </div>
         </div>
@@ -425,12 +573,12 @@
                     <p>Version "Math Edition"</p>
                 </div>
                 <div class="stat-item">
-                    <h3>17+</h3>
-                    <p>Math Functions</p>
+                    <h3>2</h3>
+                    <p>Implementazioni (Python + C++)</p>
                 </div>
                 <div class="stat-item">
-                    <h3>21</h3>
-                    <p>Documentation Chapters</p>
+                    <h3>17+</h3>
+                    <p>Math Functions</p>
                 </div>
                 <div class="stat-item">
                     <h3>100%</h3>
@@ -445,18 +593,19 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h4>Ascension</h4>
-                    <p>Un linguaggio di programmazione educativo con sintassi C-like, virtual machine stack-based e supporto completo per GUI, networking, e neural networks.</p>
+                    <p>Un linguaggio di programmazione educativo con sintassi C-like. <strong>Ascension IS the syntax</strong> — disponibile in Python (reference) e C++ (performance).</p>
                 </div>
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <a href="https://github.com/edefede/ascension">GitHub Repository</a>
                     <a href="https://github.com/edefede/ascension/blob/main/README.md">Documentation</a>
                     <a href="https://github.com/edefede/ascension/tree/main/examples">Examples</a>
+                    <a href="https://github.com/edefede/ascension/tree/main/cpp">C++ Implementation</a>
                 </div>
                 <div class="footer-section">
                     <h4>Resources</h4>
                     <a href="https://github.com/edefede/ascension/blob/main/MANUALE_UTENTE.md">User Manual</a>
-                    <a href="https://github.com/edefede/ascension/tree/main/neural_network">Neural Network Library</a>
+                    <a href="https://github.com/edefede/ascension/tree/main/lib">Neural Network Library</a>
                     <a href="https://github.com/edefede/ascension/issues">Report Issues</a>
                 </div>
             </div>
@@ -481,21 +630,6 @@
             });
         });
 
-        // Animated counters for stats
-        const animateCounter = (element, target) => {
-            let current = 0;
-            const increment = target / 100;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    element.textContent = target;
-                    clearInterval(timer);
-                } else {
-                    element.textContent = Math.floor(current);
-                }
-            }, 20);
-        };
-
         // Intersection Observer for animations
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -506,7 +640,7 @@
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.feature-card').forEach(card => {
+        document.querySelectorAll('.feature-card, .impl-card').forEach(card => {
             card.style.opacity = '0';
             card.style.transform = 'translateY(20px)';
             card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
