@@ -5,8 +5,8 @@
 ║                    ASCENSION - Linguaggio di Programmazione                   ║
 ║                         Virtual Machine e Compilatore                         ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
-║  Versione: 12.7 (Math Edition)                                               ║
-║  Data: 13/01/2026                                                            ║
+║  Versione: 12.8 (Atomo Edition)                                              ║
+║  Data: 17/01/2026                                                            ║
 ║  Autore: EdeFede                                                             ║
 ║  Licenza: GPL v3                                                             ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
@@ -16,6 +16,11 @@
 ║  - Controllo di flusso: if/else if/else, for, while, switch                  ║
 ║  - Funzioni con scope locale                                                 ║
 ║  - I/O file, networking (HTTP/Socket), GUI (Tkinter), TUI (Curses)           ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║  Novità v12.8 - Atomo Edition:                                               ║
+║  - curses_rows(): ritorna numero righe del terminale                         ║
+║  - curses_cols(): ritorna numero colonne del terminale                       ║
+║  - Preparazione per atomo.asc (editor di testo TUI)                          ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║  Novità v12.7 - Math Edition:                                                ║
 ║  - random(): float casuale tra 0.0 e 1.0                                     ║
@@ -578,6 +583,16 @@ class AscensionVM:
                         try: self.stack.append(self.current_screen.getch())
                         except: self.stack.append(-1)
                     else: self.stack.append(-1)
+                elif op == 'CURSES_ROWS':
+                    if self.current_screen:
+                        rows, cols = self.current_screen.getmaxyx()
+                        self.stack.append(rows)
+                    else: self.stack.append(0)
+                elif op == 'CURSES_COLS':
+                    if self.current_screen:
+                        rows, cols = self.current_screen.getmaxyx()
+                        self.stack.append(cols)
+                    else: self.stack.append(0)
 
                 # --- NETWORK (HTTP) ---
                 elif op == 'HTTP_GET':
@@ -1887,7 +1902,7 @@ class AscensionCompiler:
             'open', 'write', 'close', 'read_line', 'read_all',
             # Curses
             'curses_init', 'curses_end', 'curses_clear', 'curses_refresh',
-            'curses_move', 'curses_write', 'curses_read_key',
+            'curses_move', 'curses_write', 'curses_read_key', 'curses_rows', 'curses_cols',
             # HTTP
             'http_get', 'http_post', 'response_status', 'response_body',
             # Tkinter Keywords (v11.0)
@@ -2426,6 +2441,8 @@ class AscensionCompiler:
         arg = self.extract_balanced_arg(expr, 'curses_write');
         if arg: self.parse_expression(arg); self.ops.append(('CURSES_WRITE', None)); return
         if re.match(r'^curses_read_key\(\)$', expr): self.ops.append(('CURSES_READ_KEY', None)); return
+        if re.match(r'^curses_rows\(\)$', expr): self.ops.append(('CURSES_ROWS', None)); return
+        if re.match(r'^curses_cols\(\)$', expr): self.ops.append(('CURSES_COLS', None)); return
 
         # --- NETWORKING (HTTP) ---
         arg = self.extract_balanced_arg(expr, 'http_get');
@@ -2993,7 +3010,7 @@ if __name__ == "__main__":
     v = None
     try:
         with open(input_file, 'r') as f: src = f.read()
-        print(f"--- Ascension v12.7 (Math Edition): {input_file} ---")
+        print(f"--- Ascension v12.8 (Atomo Edition): {input_file} ---")
         c = AscensionCompiler(); bc = c.compile(src, base_dir)
         if debug: print_bytecode(bc)
         v = AscensionVM(); v.load_program(bc, c.structs); v.run()
