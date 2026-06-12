@@ -16,6 +16,13 @@
 #include <cmath>
 #include "value.hpp"
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+#ifndef M_E
+#define M_E 2.71828182845904523536
+#endif
+
 namespace asc {
 
 class AscensionCompiler {
@@ -98,7 +105,7 @@ private:
         std::vector<std::string> stmts; std::string cur; int br = 0, pr = 0; bool qt = false;
         for (size_t i = 0; i < src.size(); i++) {
             char c = src[i];
-            if (c == '"') qt = !qt;
+            if (c == '"' && (i == 0 || src[i-1] != '\\')) qt = !qt;
             if (!qt) {
                 if (c == '{') { br++; cur += c; continue; }
                 else if (c == '}') { br--; cur += c; if (br == 0 && pr == 0) { std::string rest = trim(src.substr(i + 1)); if (!rest.empty() && rest.substr(0, 4) != "else" && rest.substr(0, 5) != "catch") { std::string t = trim(cur); if (!t.empty()) stmts.push_back(t); cur = ""; } } continue; }
@@ -113,8 +120,9 @@ private:
     
     std::vector<std::string> splitArgs(const std::string& s) {
         std::vector<std::string> args; std::string cur; int pr = 0, br = 0, bk = 0; bool qt = false;
-        for (char c : s) {
-            if (c == '"') qt = !qt;
+        for (size_t i = 0; i < s.size(); i++) {
+            char c = s[i];
+            if (c == '"' && (i == 0 || s[i-1] != '\\')) qt = !qt;
             if (!qt) { if (c == '(') pr++; else if (c == ')') pr--; else if (c == '{') br++; else if (c == '}') br--; else if (c == '[') bk++; else if (c == ']') bk--; }
             if (c == ',' && pr == 0 && br == 0 && bk == 0 && !qt) { std::string t = trim(cur); if (!t.empty()) args.push_back(t); cur = ""; }
             else cur += c;
@@ -229,7 +237,11 @@ private:
                     if (c == ')') pd++; else if (c == '(') pd--; else if (c == ']') bkd++; else if (c == '[') bkd--;
                     if (pd == 0 && bkd == 0 && i >= (int)opStr.size() - 1 && expr.substr(i - opStr.size() + 1, opStr.size()) == opStr) {
                         if ((opStr == ">" || opStr == "<") && i + 1 < (int)expr.size() && expr[i+1] == '=') continue;
-                        if (opStr == "-" && i == 0) continue;
+                        if (opStr == "-") {
+                            // meno unario: a inizio espressione o preceduto da un operatore
+                            int j = i - 1; while (j >= 0 && expr[j] == ' ') j--;
+                            if (j < 0 || std::string("+-*/%<>=!&|(,[").find(expr[j]) != std::string::npos) continue;
+                        }
                         std::string left = trim(expr.substr(0, i - opStr.size() + 1)), right = trim(expr.substr(i + 1));
                         if (!left.empty() && !right.empty()) { parseExpression(left); parseExpression(right); ops.push_back(Opcode(opName)); return; }
                     }
@@ -265,8 +277,10 @@ private:
                         ops.push_back(Opcode("PUSH", "\"" + key + "\"")); ops.push_back(Opcode("DICT_SET"));
                     }
                 };
-                for (char c : content) {
-                    if (c == '"') qt = !qt; if (!qt) { if (c == '(') pd++; else if (c == ')') pd--; else if (c == '{') bd++; else if (c == '}') bd--; }
+                for (size_t i = 0; i < content.size(); i++) {
+                    char c = content[i];
+                    if (c == '"' && (i == 0 || content[i-1] != '\\')) qt = !qt;
+                    if (!qt) { if (c == '(') pd++; else if (c == ')') pd--; else if (c == '{') bd++; else if (c == '}') bd--; }
                     if (c == ',' && pd == 0 && bd == 0 && !qt) { addPair(trim(cur)); cur = ""; } else cur += c;
                 }
                 if (!trim(cur).empty()) addPair(trim(cur));
@@ -310,8 +324,18 @@ private:
             std::string line = trim(lineRaw); if (line.empty()) continue;
             
             if (line.substr(0, 8) == "include ") { std::regex rx("include\\s+\"([^\"]+)\""); std::smatch m; if (std::regex_search(line, m, rx)) { std::ifstream f(baseDir + "/" + std::string(m[1])); if (f) { std::stringstream ss; ss << f.rdbuf(); compileInternal(ss.str()); } } continue; }
-            if (line == "break") { ops.push_back(Opcode("JMP", loopStack.back().second)); continue; }
-            if (line == "continue") { ops.push_back(Opcode("JMP", loopStack.back().first)); continue; }
+            if (line == "break") {
+                if (loopStack.empty()) throw AscensionException("'break' fuori da loop/switch", "CompileError");
+                ops.push_back(Opcode("JMP", loopStack.back().second)); continue;
+            }
+            if (line == "continue") {
+                // salta i frame di switch (label di inizio vuota) fino al loop piu' vicino
+                std::string tgt;
+                for (auto it = loopStack.rbegin(); it != loopStack.rend(); ++it)
+                    if (!it->first.empty()) { tgt = it->first; break; }
+                if (tgt.empty()) throw AscensionException("'continue' fuori da loop", "CompileError");
+                ops.push_back(Opcode("JMP", tgt)); continue;
+            }
             if (line.substr(0, 7) == "struct ") { std::regex rx("struct\\s+(\\w+)\\s*\\{(.*?)\\}"); std::smatch m; if (std::regex_search(line, m, rx)) { std::vector<std::string> flds; std::istringstream iss(m[2]); std::string f; while (std::getline(iss, f, ',')) { std::string t = trim(f); if (!t.empty()) flds.push_back(t); } structs[m[1]] = flds; } continue; }
             
             if (line.substr(0, 5) == "func ") {
@@ -358,7 +382,7 @@ private:
                 if (std::regex_search(line, m, rx)) {
                     std::string h = m[1]; size_t bs = line.find('{'); auto [body, ab] = extractBracedBlock(line, bs);
                     std::vector<std::string> parts; std::istringstream iss(h); std::string p; while (std::getline(iss, p, ';')) parts.push_back(p);
-                    if (parts.size() == 3) { std::string ls = getLabel("fs"), le = getLabel("fe"); loopStack.push_back({ls, le}); compileInternal(parts[0] + ";"); ops.push_back(Opcode("LABEL", ls)); parseExpression(parts[1]); ops.push_back(Opcode("JZ", le)); compileInternal(body); compileInternal(parts[2] + ";"); ops.push_back(Opcode("JMP", ls)); ops.push_back(Opcode("LABEL", le)); loopStack.pop_back(); }
+                    if (parts.size() == 3) { std::string ls = getLabel("fs"), lc = getLabel("fc"), le = getLabel("fe"); loopStack.push_back({lc, le}); compileInternal(parts[0] + ";"); ops.push_back(Opcode("LABEL", ls)); parseExpression(parts[1]); ops.push_back(Opcode("JZ", le)); compileInternal(body); ops.push_back(Opcode("LABEL", lc)); compileInternal(parts[2] + ";"); ops.push_back(Opcode("JMP", ls)); ops.push_back(Opcode("LABEL", le)); loopStack.pop_back(); }
                 }
                 continue;
             }

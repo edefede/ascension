@@ -47,10 +47,22 @@ g++ -std=c++17 -O2 -DHAS_NETWORK ascension.cpp -o ascension.exe -lws2_32
 ## Uso
 
 ```bash
-./ascension script.asc         # Esegui
-./ascension script.asc -debug  # Esegui con debug bytecode
-./ascension                    # Mostra moduli compilati
+./ascension script.asc             # Esegui
+./ascension script.asc -debug      # Esegui con debug bytecode
+./ascension script.asc -allow-exec # Abilita system() ed exec()
+./ascension                        # Mostra moduli compilati
 ```
+
+## Sicurezza
+
+- `system()` ed `exec()` sono **disabilitati di default**: uno script che li usa
+  termina con `SecurityError`. Abilitarli esplicitamente con `-allow-exec`,
+  solo per script fidati.
+- `http_get`/`http_post` supportano solo `http://`: gli URL `https://` vengono
+  rifiutati con errore (non esiste supporto TLS, prima la richiesta partiva in
+  chiaro sulla porta 443).
+- Le richieste HTTP hanno timeout di 10s e risposta limitata a 8 MB;
+  `socket_recv` è limitato a 1 MB per chiamata.
 
 ## Funzioni per Modulo
 

@@ -8,7 +8,7 @@
  *   +Network:    g++ -std=c++17 -O2 -DHAS_NETWORK ascension.cpp -o ascension
  *   Full:        g++ -std=c++17 -O2 -DHAS_CURSES -DHAS_NETWORK ascension.cpp -o ascension -lncurses
  *
- * Uso: ./ascension script.asc [-debug]
+ * Uso: ./ascension script.asc [-debug] [-allow-exec]
  *
  * (c) 2026 EdeFede - GPL v3
  */
@@ -22,7 +22,9 @@
 int main(int argc, char* argv[]) {
     if (argc < 2) {
         std::cout << "ASCENSION v12.7 (Math Edition) C++\n";
-        std::cout << "Uso: " << argv[0] << " <file.asc> [-debug]\n\n";
+        std::cout << "Uso: " << argv[0] << " <file.asc> [-debug] [-allow-exec]\n";
+        std::cout << "  -debug       stampa il bytecode prima dell'esecuzione\n";
+        std::cout << "  -allow-exec  abilita system() ed exec() (disabilitati di default)\n\n";
         std::cout << "Moduli compilati:\n";
         std::cout << "  [*] File I/O\n";
 #ifdef HAS_CURSES
@@ -39,7 +41,13 @@ int main(int argc, char* argv[]) {
     }
     
     std::string filename = argv[1];
-    bool debug = (argc > 2 && std::string(argv[2]) == "-debug");
+    bool debug = false, allowExec = false;
+    for (int i = 2; i < argc; i++) {
+        std::string opt = argv[i];
+        if (opt == "-debug") debug = true;
+        else if (opt == "-allow-exec") allowExec = true;
+        else { std::cerr << "Opzione sconosciuta: " << opt << std::endl; return 1; }
+    }
     
     // Estrai directory base
     std::string baseDir = ".";
@@ -80,6 +88,7 @@ int main(int argc, char* argv[]) {
         
         // Esegui
         asc::AscensionVM vm;
+        vm.setAllowExec(allowExec);
         vm.loadProgram(bytecode, compiler.getStructs());
         vm.run();
         
