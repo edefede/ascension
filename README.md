@@ -3,7 +3,7 @@
 **A lightweight, interpreted programming language**  
 C-like syntax • No explicit typing • Built-in GUI, Networking, Neural Networks
 
-![Version](https://img.shields.io/badge/version-12.7-green?style=flat-square)
+![Version](https://img.shields.io/badge/version-12.8-green?style=flat-square)
 ![License](https://img.shields.io/badge/license-GPL--3.0-orange?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.x-blue?style=flat-square)
 ![C++](https://img.shields.io/badge/C%2B%2B-17-blue?style=flat-square)
@@ -19,7 +19,7 @@ Ascension is **the syntax**. The implementation is just how you run it:
 ### 🐍 Python (Reference Implementation)
 ```bash
 # Run a program
-python3 ascension_12_7.py examples/hello.asc
+python3 ascension_12_8.py examples/hello.asc
 
 # Interactive shell
 python3 ascension_shell_12_7.py
@@ -54,13 +54,14 @@ Header-only modular design, 15% more compact, blazing fast.
 - **Terminal UI** — Curses support for console apps
 - **Math Functions** — Trigonometry, random, exponentials (v12.7)
 - **Neural Networks** — Built-in library for ML experiments (v12.7)
+- **Terminal Size Detection** — `curses_rows()`, `curses_cols()` for dynamic TUI layouts (v12.8)
 
 ## 📝 Examples
 
 ### Variables and Output
 ```ascension
 name = "Ascension";
-version = 12.7;
+version = 12.8;
 print("Welcome to", name, "v" + version);
 ```
 
@@ -266,7 +267,7 @@ mlp_load_weights("xor_trained.weights");
 | **Network** | `http_get`, `http_post`, `response_status`, `response_body` |
 | **Socket** | `socket_open`, `socket_connect`, `socket_send`, `socket_recv`, `socket_close`, `socket_bind`, `socket_listen`, `socket_accept`, `get_ip` |
 | **GUI** | `tk_root`, `tk_widget`, `tk_pack`, `tk_grid`, `tk_bind`, `tk_mainloop`, `tk_canvas_*`, `tk_dialog_*` |
-| **TUI** | `curses_init`, `curses_end`, `curses_print`, `curses_refresh`, `curses_getkey`, `curses_clear` |
+| **TUI** | `curses_init`, `curses_end`, `curses_print`, `curses_refresh`, `curses_getkey`, `curses_clear`, `curses_rows`, `curses_cols` |
 | **System** | `system`, `exec` |
 
 ## 🔑 Keywords
@@ -291,7 +292,7 @@ mlp_load_weights("xor_trained.weights");
 
 ```
 ascension/
-├── ascension_12_7.py        # Main interpreter (v12.7 Math Edition)
+├── ascension_12_8.py        # Main interpreter (v12.8 Atomo Edition)
 ├── ascension_shell_12_7.py  # Interactive REPL shell
 ├── cpp/                     # C++ implementation
 │   ├── ascension.cpp        # Main C++ interpreter
@@ -327,7 +328,8 @@ ascension/
 
 | Version | Name | Highlights |
 |---------|------|------------|
-| **12.7** | **Math Edition** | 17 math functions, neural network library, PI/E constants |
+| **12.8** | **Atomo Edition** | `curses_rows()`, `curses_cols()` — terminal size detection for dynamic TUI |
+| 12.7 | Math Edition | 17 math functions, neural network library, PI/E constants |
 | 12.6 | Substr Edition | `substr()`, `chr()` string functions |
 | 12.5 | String Edition | Enhanced string operations |
 | 12.4 | System Edition | `system()`, `exec()` commands |
